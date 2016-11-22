@@ -30,10 +30,19 @@ function startLoad() {
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
         
-        var startFrame = config.startFrame;
-        var endFrame = startFrame + config.contentFrames;
-        var frame = startFrame;
-        var isTransitioning = false;
+        var startFrame;
+        var endFrame;
+        var frame;
+        var isTransitioning;
+        
+        window.restartAnimation = function() {
+            startFrame = config.startFrame;
+            endFrame = startFrame + config.contentFrames;
+            frame = startFrame;
+            isTransitioning = false;
+        };
+        restartAnimation();
+        
         var render = function() {
             ctx.drawImage(frames[frame], 0, 0, canvas.width, canvas.height);
             frame += config.frameStep;
@@ -48,14 +57,12 @@ function startLoad() {
         window.nextSlide = function() {
             if ( !isTransitioning ) {
                 var diff = config.transitionFrames + config.contentFrames;
-                startFrame += diff;
-                endFrame += diff;
-                isTransitioning = true;
-                if ( startFrame >= config.endFrame ) {
-                    startFrame = config.startFrame;
-                    endFrame = startFrame + config.contentFrames;
-                    frame = startFrame;
-                    isTransitioning = false;
+                if ( startFrame + diff > config.endFrame ) {
+                    $("#restart").modal("show");
+                } else {
+                    startFrame += diff;
+                    endFrame += diff;
+                    isTransitioning = true;
                 }
             }
         };
