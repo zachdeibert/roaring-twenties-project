@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Roaring Twenties Project</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="index.css" />
+        <script src="index.js"></script>
+    </head>
+    <body onload="startLoad()">
+        <div class="loading" id="loading">
+            <h1>Loading project files...</h1>
+            <h4>Please be patient</h4>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active" style="width: 50%" id="progress">Starting script</div>
+            </div>
+        </div>
+        <div class="play" id="play" style="display: none;">
+            <canvas id="canvas" onclick="nextSlide()"></canvas>
+        </div>
+    </body>
+</html>
