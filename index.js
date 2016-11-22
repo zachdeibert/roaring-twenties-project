@@ -67,8 +67,10 @@ function startLoad() {
         var tmp = zeros + frame;
         img.src = config.animationUrl + "/" + tmp.substr(tmp.length - config.frameDigits) + "." + config.imageType;
         frames[frame] = img;
-        progressbar.innerHTML = frame + "/" + config.endFrame;
-        progressbar.style.width = (frame / config.endFrame * 100) + "%";
+        var currentFile = (frame - config.startFrame) / config.frameStep + 1;
+        var totalFiles = (config.endFrame - config.startFrame) / config.frameStep + 1;
+        progressbar.innerHTML = currentFile + "/" + totalFiles;
+        progressbar.style.width = (currentFile / totalFiles * 100) + "%";
         img.onload = function() {
             frame += config.frameStep;
             if ( frame < config.endFrame ) {
