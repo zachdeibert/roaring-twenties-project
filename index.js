@@ -3,7 +3,7 @@ var config = {
     "imageType": "png",
     "startFrame": 0,
     "endFrame": 1750,
-    "frameStep": 5,
+    "frameStep": 1,
     "frameDigits": 4,
     "transitionFrames": 50,
     "contentFrames": 250,
