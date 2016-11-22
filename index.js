@@ -7,7 +7,8 @@ var config = {
     "frameDigits": 4,
     "transitionFrames": 50,
     "contentFrames": 250,
-    "maxFPS": 24
+    "maxFPS": 24,
+    "loadingThreads": 10
 };
 
 function startLoad() {
@@ -68,25 +69,31 @@ function startLoad() {
         };
     };
     
-    var frame = config.startFrame;
-    var loadFrame = function() {
+    var nextFrameToLoad = config.startFrame;
+    var framesLoading = 0;
+    var framesLoaded = 0;
+    var framesTotal = (config.endFrame - config.startFrame) / config.frameStep + 1;
+    var loadingThread = function() {
         var img = document.createElement("img");
-        var tmp = zeros + frame;
+        var tmp = zeros + nextFrameToLoad;
         img.src = config.animationUrl + "/" + tmp.substr(tmp.length - config.frameDigits) + "." + config.imageType;
-        frames[frame] = img;
-        var currentFile = (frame - config.startFrame) / config.frameStep + 1;
-        var totalFiles = (config.endFrame - config.startFrame) / config.frameStep + 1;
-        progressbar.innerHTML = currentFile + "/" + totalFiles;
-        progressbar.style.width = (currentFile / totalFiles * 100) + "%";
+        frames[nextFrameToLoad] = img;
+        progressbar.innerHTML = framesLoaded + "/" + framesTotal;
+        progressbar.style.width = (framesLoaded * 100 / framesTotal) + "%";
+        ++framesLoading;
+        nextFrameToLoad += config.frameStep;
         img.onload = function() {
-            frame += config.frameStep;
-            if ( frame < config.endFrame ) {
-                loadFrame();
-            } else {
+            --framesLoading;
+            ++framesLoaded;
+            if ( nextFrameToLoad < config.endFrame ) {
+                loadingThread();
+            } else if ( framesLoading == 0 ) {
                 showAnimation();
             }
         };
         document.body.appendChild(img);
     };
-    loadFrame();
+    for ( var i = 0; i < config.loadingThreads; ++i ) {
+        loadingThread();
+    }
 }
